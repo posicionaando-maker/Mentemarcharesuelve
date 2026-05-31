@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#2c7da0">
+    <meta name="description" content="MindForge · Entrenamiento cognitivo para emprendedores. Enfoque, resolución de problemas y meditación aplicada.">
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%232c5e3a'/%3E%3Cpath d='M35,50 L50,35 L65,50 L50,65 Z' fill='%23f7f3e0'/%3E%3Cpath d='M50,30 Q58,45 50,60 Q42,45 50,30' fill='%23f7f3e0'/%3E%3Ctext x='50' y='78' font-size='20' text-anchor='middle' fill='%23f7f3e0'%3E⚡%3C/text%3E%3C/svg%3E">
+    
+    <title>MindForge · Enfoque Emprendedor</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #eef2f0;
+            color: #1a3b2e;
+            padding: 0 0 80px 0;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e5631, #2c7a47);
+            color: white;
+            padding: 1.5rem 1rem;
+            border-radius: 0 0 2rem 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 0.8rem;
+        }
+
+        /* Dashboard cards */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 0.8rem;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid #cde0d0;
+        }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #e67e22;
+        }
+        .stat-label {
+            font-size: 0.7rem;
+            color: #5a7c6e;
+        }
+
+        /* Diagnóstico rápido */
+        .diagnostic-card {
+            background: linear-gradient(135deg, #fef9e6, #fff6e0);
+            border-radius: 1.2rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 6px solid #e67e22;
+            cursor: pointer;
+        }
+        .diagnostic-question {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .rating-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 0.8rem 0;
+        }
+        .rating-btn {
+            background: #e0e8e0;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .rating-btn.selected {
+            background: #e67e22;
+            color: white;
+        }
+
+        /* Recomendación */
+        .recommend-card {
+            background: #2c5e3a;
+            color: white;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .recommend-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .recommend-mode {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin: 0.3rem 0;
+        }
+
+        /* Pestañas */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            background: #d4e2d0;
+            border-radius: 2rem;
+            padding: 0.3rem;
+        }
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #1a3b2e;
+        }
+        .tab-btn.active {
+            background: white;
+            color: #2c5e3a;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Ejercicios */
+        .exercise-item {
+            background: white;
+            border-radius: 1rem;
+            padding: 0.8rem;
+            margin-bottom: 0.6rem;
+            border: 1px solid #cde0d0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .exercise-item.completed {
+            background: #e8f0e5;
+            opacity: 0.7;
+        }
+        .exercise-badge {
+            font-size: 0.7rem;
+            background: #2c5e3a;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+        }
+
+        /* Simulador de problema */
+        .problem-simulator {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .problem-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #cde0d0;
+            border-radius: 1rem;
+            margin: 0.5rem 0;
+            font-family: inherit;
+        }
+        .insight-badge {
+            background: #e8f5e9;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .meditation-card {
+            background: white;
+            max-width: 90%;
+            width: 500px;
+            max-height: 90%;
+            overflow-y: auto;
+            border-radius: 2rem;
+            padding: 1.5rem;
+        }
+        .timer-circle {
+            width: 160px;
+            height: 160px;
+            margin: 1rem auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .timer-svg {
+            transform: rotate(-90deg);
+        }
+        .timer-text {
+            position: absolute;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c5e3a;
+        }
+        .btn-audio, .btn-close, .btn-start {
+            background: #2c5e3a;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.2rem;
+        }
+        .btn-complete {
+            background: #e67e22;
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.7rem;
+            border-radius: 2rem;
+            border: none;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .micro-reset {
+            background: linear-gradient(135deg, #1e5631, #2c7a47);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 2rem;
+        }
+        .hidden {
+            display: none;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: #1a3b2e;
+            color: white;
+            padding: 0.8rem;
+            border-radius: 2rem;
+            text-align: center;
+            z-index: 1100;
+            animation: fadeOut 2s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 0; transform: translateY(20px);}
+            15% { opacity: 1; transform: translateY(0);}
+            85% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden;}
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #7a9e8a;
+            margin-top: 2rem;
+        }
+        button:active { transform: scale(0.97); }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>⚡ MindForge</h1>
+    <p>Entrenamiento cognitivo para emprendedores · Enfoque · Resolución de problemas · Claridad</p>
+</div>
+
+<div class="container">
+    <!-- Dashboard -->
+    <div class="dashboard">
+        <div class="stat-card">
+            <div class="stat-number" id="streakCount">0</div>
+            <div class="stat-label">🔥 Racha (días)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="problemsSolved">0</div>
+            <div class="stat-label">💡 Problemas refinados</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="zoomInCount">0</div>
+            <div class="stat-label">🔬 Zoom In (enfoque)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="zoomOutCount">0</div>
+            <div class="stat-label">🌍 Zoom Out (visión)</div>
+        </div>
+    </div>
+
+    <!-- Diagnóstico rápido -->
+    <div class="diagnostic-card" id="diagnosticBtn">
+        <div class="diagnostic-question">🔍 ¿Cómo está tu mente ahora?</div>
+        <div id="diagnosticArea">
+            <div id="q1"></div>
+            <div id="q2"></div>
+            <div id="q3"></div>
+            <button id="runDiagnostic" style="background:#e67e22; color:white; border:none; padding:0.5rem 1rem; border-radius:2rem; margin-top:0.5rem;">📋 Obtener recomendación</button>
+        </div>
+    </div>
+
+    <!-- Recomendación del momento -->
+    <div id="recommendCard" class="recommend-card">
+        <div class="recommend-title">✨ Recomendación basada en diagnóstico</div>
+        <div class="recommend-mode" id="recommendMode">🔬 Zoom In</div>
+        <div id="recommendText">Inicia sesión de enfoque quirúrgico</div>
+    </div>
+
+    <!-- Pestañas -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="exercises">🧘 Meditaciones</button>
+        <button class="tab-btn" data-tab="problem">💼 Simulador de problema</button>
+        <button class="tab-btn" data-tab="microreset">⏱️ Micro-descanso 40s</button>
+    </div>
+
+    <!-- Contenido pestaña 1: Ejercicios -->
+    <div id="tab-exercises" class="tab-content active">
+        <div id="exercisesList"></div>
+    </div>
+
+    <!-- Contenido pestaña 2: Simulador de problema -->
+    <div id="tab-problem" class="tab-content">
+        <div class="problem-simulator">
+            <h4>📝 Define tu problema de negocio</h4>
+            <textarea id="problemBefore" class="problem-input" rows="3" placeholder="Ej: No logro retener clientes después de la primera compra..."></textarea>
+            <button id="meditateBeforeProblem" class="btn-audio" style="background:#2c5e3a;">🧘 Meditar antes (Zoom Out)</button>
+            <div id="problemInsight" class="insight-badge hidden"></div>
+            <textarea id="problemAfter" class="problem-input" rows="3" placeholder="Después de meditar, redefine el problema aquí..."></textarea>
+            <button id="compareProblemBtn" style="background:#e67e22; color:white; border:none; padding:0.5rem 1rem; border-radius:2rem;">🔍 Comparar y medir mejora</button>
+            <div id="comparisonResult"></div>
+        </div>
+    </div>
+
+    <!-- Contenido pestaña 3: Micro-descanso 40s -->
+    <div id="tab-microreset" class="tab-content">
+        <div class="micro-reset" id="microResetBtn" style="cursor:pointer;">
+            <div style="font-size:3rem;">⏱️</div>
+            <h3>Iniciar micro-descanso de 40 segundos</h3>
+            <p>Respiración cuadrada · Reenfoque · Rompe la rumiación</p>
+        </div>
+        <div id="microTimer" class="hidden" style="text-align:center; padding:2rem; background:#1e5631; border-radius:2rem; color:white;">
+            <div id="microTime" style="font-size:4rem; font-weight:800;">00:40</div>
+            <div id="microPhase">🌬️ Respiración cuadrada</div>
+        </div>
+    </div>
+
+    <footer>MindForge · Basado en investigación cognitiva · PWA offline · Datos locales</footer>
+</div>
+
+<script>
+    // =================================================================
+    // 1. EJERCICIOS CLASIFICADOS POR MODO (Zoom In / Zoom Out)
+    // =================================================================
+    const EJERCICIOS = [
+        // ZOOM IN (Atención Focalizada) - para enfoque quirúrgico
+        { id: 1, modo: "zoom-in", titulo: "Atención focalizada en la respiración", duracion_seg: 120, tecnica: "Concéntrate únicamente en la sensación del aire entrando y saliendo por la nariz. Cada vez que tu mente divague, vuelve suavemente a la respiración. Esto entrena el hiperenfoque para tu problema de negocio.", autor: "Adaptado de Kabat-Zinn" },
+        { id: 2, modo: "zoom-in", titulo: "Un solo objeto: tu problema clave", duracion_seg: 180, tecnica: "Visualiza tu problema como un objeto concreto. Obsérvalo desde todos los ángulos. No intentes resolverlo, solo míralo con detalle extremo.", autor: "Técnica de enfoque ejecutivo" },
+        { id: 3, modo: "zoom-in", titulo: "Escaneo de una variable", duracion_seg: 150, tecnica: "Elige una sola variable de tu negocio (ej: tasa de conversión). Mantén tu atención en ella durante toda la meditación. Ignora todo lo demás.", autor: "Basado en Goleman" },
+        // ZOOM OUT (Monitoreo Abierto) - para visión sistémica
+        { id: 4, modo: "zoom-out", titulo: "Observación de pensamientos como nubes", duracion_seg: 180, tecnica: "Siéntate y observa todos tus pensamientos sobre el negocio sin aferrarte. Déjalos pasar como nubes. Esto abre espacio para conexiones inesperadas.", autor: "Thich Nhat Hanh" },
+        { id: 5, modo: "zoom-out", titulo: "Visión sistémica del problema", duracion_seg: 180, tecnica: "Imagina tu problema como parte de un sistema más grande. ¿Qué causas raíz? ¿Qué efectos secundarios? Observa sin juzgar.", autor: "Peter Senge adaptado" },
+        { id: 6, modo: "zoom-out", titulo: "Escucha abierta (sonidos sin etiqueta)", duracion_seg: 150, tecnica: "Escucha todos los sonidos a tu alrededor sin nombrarlos. Esto entrena tu mente para recibir información sin filtros, clave para la innovación.", autor: "Shunryu Suzuki" },
+        // RESET (micro-meditación)
+        { id: 7, modo: "reset", titulo: "Micro-reset de 40s", duracion_seg: 40, tecnica: "4s inhala - 4s retén - 4s exhala - 4s pausa. Repite 3 veces. Luego define UNA sola tarea para los próximos minutos.", autor: "Protocolo de reenfoque" }
+    ];
+
+    // =================================================================
+    // 2. ESTADO Y ALMACENAMIENTO
+    // =================================================================
+    let progreso = {};
+    let streak = 0;
+    let stats = { problemsRefined: 0, zoomInSessions: 0, zoomOutSessions: 0 };
+    let recomendacionActual = "zoom-in"; // zoom-in, zoom-out, reset
+
+    function cargarDatos() {
+        const saved = localStorage.getItem('mindforge_progress');
+        if(saved) progreso = JSON.parse(saved);
+        else progreso = {};
+        
+        const savedStats = localStorage.getItem('mindforge_stats');
+        if(savedStats) stats = JSON.parse(savedStats);
+        
+        const savedStreak = localStorage.getItem('mindforge_streak');
+        streak = parseInt(savedStreak) || 0;
+        
+        actualizarUIStats();
+    }
+    
+    function guardarProgreso() {
+        localStorage.setItem('mindforge_progress', JSON.stringify(progreso));
+    }
+    
+    function guardarStats() {
+        localStorage.setItem('mindforge_stats', JSON.stringify(stats));
+        actualizarUIStats();
+    }
+    
+    function actualizarUIStats() {
+        document.getElementById('problemsSolved').innerText = stats.problemsRefined;
+        document.getElementById('zoomInCount').innerText = stats.zoomInSessions;
+        document.getElementById('zoomOutCount').innerText = stats.zoomOutSessions;
+        document.getElementById('streakCount').innerText = streak;
+    }
+    
+    function marcarCompletado(id, modo) {
+        const hoy = new Date().toISOString().slice(0,10);
+        progreso[id] = hoy;
+        guardarProgreso();
+        
+        if(modo === 'zoom-in') stats.zoomInSessions++;
+        if(modo === 'zoom-out') stats.zoomOutSessions++;
+        guardarStats();
+        
+        actualizarRacha();
+        renderizarLista();
+        mostrarToast(`✅ Sesión completada: ¡modo ${modo === 'zoom-in' ? 'enfoque' : modo === 'zoom-out' ? 'visión' : 'reset'} activado!`);
+    }
+    
+    function estaCompletado(id) {
+        return progreso[id] !== undefined && progreso[id] !== null;
+    }
+    
+    function actualizarRacha() {
+        const hoy = new Date().toISOString().slice(0,10);
+        const ultima = localStorage.getItem('mindforge_last');
+        let nuevaRacha = streak;
+        if(!ultima) nuevaRacha = 1;
+        else {
+            const diff = Math.floor((new Date(hoy) - new Date(ultima)) / (1000*60*60*24));
+            if(diff === 1) nuevaRacha++;
+            else if(diff > 1) nuevaRacha = 1;
+        }
+        streak = nuevaRacha;
+        localStorage.setItem('mindforge_streak', streak);
+        localStorage.setItem('mindforge_last', hoy);
+        document.getElementById('streakCount').innerText = streak;
+    }
+    
+    // =================================================================
+    // 3. DIAGNÓSTICO RÁPIDO
+    // =================================================================
+    let respuestasDiag = { q1: 3, q2: 3, q3: 3 };
+    
+    function renderDiagnostico() {
+        const q1Div = document.getElementById('q1');
+        const q2Div = document.getElementById('q2');
+        const q3Div = document.getElementById('q3');
+        
+        q1Div.innerHTML = `<div class="diagnostic-question">1. ¿Sientes que le das vueltas al mismo problema sin avanzar?</div>
+        <div class="rating-buttons" id="q1-btns">${[1,2,3,4,5].map(n => `<button class="rating-btn ${respuestasDiag.q1 === n ? 'selected' : ''}" data-q="q1" data-val="${n}">${n}</button>`).join('')}</div>`;
+        
+        q2Div.innerHTML = `<div class="diagnostic-question">2. ¿Te cuesta ver el panorama completo de tu negocio?</div>
+        <div class="rating-buttons" id="q2-btns">${[1,2,3,4,5].map(n => `<button class="rating-btn ${respuestasDiag.q2 === n ? 'selected' : ''}" data-q="q2" data-val="${n}">${n}</button>`).join('')}</div>`;
+        
+        q3Div.innerHTML = `<div class="diagnostic-question">3. ¿Te sientes mentalmente disperso o abrumado?</div>
+        <div class="rating-buttons" id="q3-btns">${[1,2,3,4,5].map(n => `<button class="rating-btn ${respuestasDiag.q3 === n ? 'selected' : ''}" data-q="q3" data-val="${n}">${n}</button>`).join('')}</div>`;
+        
+        document.querySelectorAll('.rating-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const q = btn.getAttribute('data-q');
+                const val = parseInt(btn.getAttribute('data-val'));
+                respuestasDiag[q] = val;
+                renderDiagnostico();
+            });
+        });
+    }
+    
+    function ejecutarDiagnostico() {
+        const rumiacion = respuestasDiag.q1;
+        const vision = respuestasDiag.q2;
+        const dispersion = respuestasDiag.q3;
+        
+        if(dispersion >= 4) {
+            recomendacionActual = "reset";
+        } else if(rumiacion >= 4) {
+            recomendacionActual = "zoom-out";
+        } else if(vision >= 4) {
+            recomendacionActual = "zoom-in";
+        } else {
+            recomendacionActual = "zoom-in";
+        }
+        
+        actualizarRecomendacionUI();
+        mostrarToast(`🔍 Recomendación: ${recomendacionActual === 'zoom-in' ? 'Enfoque quirúrgico (Zoom In)' : recomendacionActual === 'zoom-out' ? 'Visión sistémica (Zoom Out)' : 'Micro-descanso (Reset)'}`);
+    }
+    
+    function actualizarRecomendacionUI() {
+        const modeMap = {
+            'zoom-in': { nombre: '🔬 Zoom In · Enfoque quirúrgico', desc: 'Concéntrate en una variable a la vez. Hiperatención al detalle.' },
+            'zoom-out': { nombre: '🌍 Zoom Out · Visión sistémica', desc: 'Observa el problema como parte de un todo. Conexiones inesperadas.' },
+            'reset': { nombre: '⏱️ Reset · Micro-descanso', desc: 'Rompe la rumiación. Respiración cuadrada de 40 segundos.' }
+        };
+        document.getElementById('recommendMode').innerHTML = modeMap[recomendacionActual].nombre;
+        document.getElementById('recommendText').innerHTML = modeMap[recomendacionActual].desc;
+        const card = document.getElementById('recommendCard');
+        card.onclick = () => iniciarSesionPorRecomendacion();
+    }
+    
+    function iniciarSesionPorRecomendacion() {
+        if(recomendacionActual === 'reset') {
+            iniciarMicroReset();
+        } else {
+            const ejercicioRecomendado = EJERCICIOS.find(e => e.modo === recomendacionActual);
+            if(ejercicioRecomendado) abrirMeditacion(ejercicioRecomendado.id);
+        }
+    }
+    
+    // =================================================================
+    // 4. MEDITACIÓN MODAL
+    // =================================================================
+    function abrirMeditacion(id) {
+        const ejercicio = EJERCICIOS.find(e => e.id === id);
+        if(!ejercicio) return;
+        
+        let tiempoRestante = ejercicio.duracion_seg;
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="meditation-card">
+                <h3>🧘 ${ejercicio.titulo}</h3>
+                <p><strong>Modo:</strong> ${ejercicio.modo === 'zoom-in' ? '🔬 Zoom In' : ejercicio.modo === 'zoom-out' ? '🌍 Zoom Out' : '⏱️ Reset'}<br>
+                Duración: ${Math.floor(ejercicio.duracion_seg/60)} min ${ejercicio.duracion_seg % 60} seg</p>
+                <div style="background:#f0f4ee; padding:0.8rem; border-radius:1rem; margin:0.5rem 0;">
+                    <p>${ejercicio.tecnica}</p>
+                </div>
+                <div class="timer-circle">
+                    <svg class="timer-svg" width="160" height="160" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#d4e2d0" stroke-width="6"/>
+                        <circle id="progressCircle" cx="80" cy="80" r="70" fill="none" stroke="#2c5e3a" stroke-width="6" stroke-dasharray="440" stroke-dashoffset="440" stroke-linecap="round"/>
+                    </svg>
+                    <div class="timer-text" id="timerText">${Math.floor(tiempoRestante/60)}:${(tiempoRestante%60).toString().padStart(2,'0')}</div>
+                </div>
+                <div style="display:flex; gap:0.5rem; justify-content:center;">
+                    <button id="audioBtn" class="btn-audio">🔊 Escuchar guía</button>
+                    <button id="startTimerBtn" class="btn-start">▶ Iniciar</button>
+                    <button id="closeModalBtn" class="btn-close">✖ Cerrar</button>
+                </div>
+                <button id="completeMedBtn" class="btn-complete">✅ Marcar como completado</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        let timerInterval = null;
+        let timerRunning = false;
+        
+        function actualizarCirculo(restante, total) {
+            const circle = document.getElementById('progressCircle');
+            if(circle) {
+                const dasharray = 2 * Math.PI * 70; // ~440
+                const offset = dasharray * (restante / total);
+                circle.style.strokeDashoffset = offset;
+            }
+            const textDiv = document.getElementById('timerText');
+            if(textDiv) {
+                const mins = Math.floor(restante/60);
+                const segs = restante % 60;
+                textDiv.innerText = `${mins}:${segs.toString().padStart(2,'0')}`;
+            }
+        }
+        
+        document.getElementById('startTimerBtn').addEventListener('click', () => {
+            if(timerRunning) return;
+            timerRunning = true;
+            timerInterval = setInterval(() => {
+                if(tiempoRestante > 0) {
+                    tiempoRestante--;
+                    actualizarCirculo(tiempoRestante, ejercicio.duracion_seg);
+                    if(tiempoRestante === 0) {
+                        clearInterval(timerInterval);
+                        mostrarToast("🔔 Tiempo completado. ¡Bien hecho!");
+                        if(navigator.vibrate) navigator.vibrate(200);
+                    }
+                } else {
+                    clearInterval(timerInterval);
+                }
+            }, 1000);
+        });
+        
+        document.getElementById('audioBtn').addEventListener('click', () => {
+            if(!window.speechSynthesis) { mostrarToast("Tu navegador no soporta voz"); return; }
+            const utterance = new SpeechSynthesisUtterance(`${ejercicio.titulo}. ${ejercicio.tecnica}`);
+            utterance.lang = 'es-ES';
+            utterance.rate = 0.85;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        });
+        
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            if(timerInterval) clearInterval(timerInterval);
+            window.speechSynthesis.cancel();
+            modal.remove();
+        });
+        
+        document.getElementById('completeMedBtn').addEventListener('click', () => {
+            if(!estaCompletado(ejercicio.id)) {
+                marcarCompletado(ejercicio.id, ejercicio.modo);
+            } else {
+                mostrarToast("Ya habías completado este ejercicio");
+            }
+            if(timerInterval) clearInterval(timerInterval);
+            window.speechSynthesis.cancel();
+            modal.remove();
+        });
+        
+        actualizarCirculo(tiempoRestante, ejercicio.duracion_seg);
+    }
+    
+    // =================================================================
+    // 5. MICRO-DESCANSO DE 40 SEGUNDOS
+    // =================================================================
+    function iniciarMicroReset() {
+        const microDiv = document.getElementById('microTimer');
+        const resetBtn = document.getElementById('microResetBtn');
+        resetBtn.classList.add('hidden');
+        microDiv.classList.remove('hidden');
+        
+        let segs = 40;
+        let fase = 0; // 0: inhalar, 1: retener, 2: exhalar, 3: pausa
+        const fases = ['🌬️ Inhala 4s', '⏸️ Retén 4s', '🌬️ Exhala 4s', '🕊️ Pausa 4s'];
+        let subTimer = 4;
+        
+        const timeEl = document.getElementById('microTime');
+        const phaseEl = document.getElementById('microPhase');
+        
+        const interval = setInterval(() => {
+            if(segs <= 0) {
+                clearInterval(interval);
+                microDiv.classList.add('hidden');
+                resetBtn.classList.remove('hidden');
+                mostrarToast("✅ Micro-descanso completado. Ahora define UNA sola tarea.");
+                if(navigator.vibrate) navigator.vibrate([200,100,200]);
+                // Registrar como reset completado
+                if(!estaCompletado(7)) marcarCompletado(7, 'reset');
+                return;
+            }
+            
+            segs--;
+            const mins = Math.floor(segs/60);
+            const segsShow = segs % 60;
+            timeEl.innerText = `${mins.toString().padStart(2,'0')}:${segsShow.toString().padStart(2,'0')}`;
+            
+            subTimer--;
+            if(subTimer <= 0) {
+                fase = (fase + 1) % 4;
+                subTimer = 4;
+            }
+            phaseEl.innerText = fases[fase] + ` (${subTimer}s)`;
+        }, 1000);
+    }
+    
+    // =================================================================
+    // 6. SIMULADOR DE PROBLEMA
+    // =================================================================
+    let problemaOriginal = "";
+    
+    document.getElementById('meditateBeforeProblem').addEventListener('click', () => {
+        problemaOriginal = document.getElementById('problemBefore').value;
+        if(!problemaOriginal.trim()) {
+            mostrarToast("Escribe tu problema primero");
+            return;
+        }
+        // Abrir meditación Zoom Out
+        const zoomOutEj = EJERCICIOS.find(e => e.modo === 'zoom-out');
+        if(zoomOutEj) {
+            mostrarToast("🧘 Medita para ganar perspectiva. Luego vuelve a definir tu problema.");
+            abrirMeditacion(zoomOutEj.id);
+        }
+    });
+    
+    document.getElementById('compareProblemBtn').addEventListener('click', () => {
+        const antes = problemaOriginal;
+        const despues = document.getElementById('problemAfter').value;
+        if(!antes || !despues) {
+            mostrarToast("Completa ambas definiciones del problema");
+            return;
+        }
+        
+        // Simular mejora (comparación simple de longitud y palabras clave)
+        const antesWords = antes.split(/\s+/).length;
+        const despuesWords = despues.split(/\s+/).length;
+        const mejora = despuesWords > antesWords ? "más detallada" : despuesWords < antesWords ? "más concisa" : "similar en extensión";
+        
+        const resultDiv = document.getElementById('comparisonResult');
+        stats.problemsRefined++;
+        guardarStats();
+        
+        resultDiv.innerHTML = `
+            <div class="insight-badge" style="background:#e8f5e9;">
+                <strong>📊 Análisis de mejora:</strong><br>
+                Definición original: ${antesWords} palabras<br>
+                Nueva definición: ${despuesWords} palabras<br>
+                Tu problema está ahora ${mejora}. La meditación ayudó a reducir la rumiación y ganar claridad.
+                <br>🎯 +1 problema refinado.
+            </div>
+        `;
+        mostrarToast("✨ ¡Problema refinado! Has ganado claridad.");
+    });
+    
+    // =================================================================
+    // 7. RENDERIZAR LISTA DE EJERCICIOS
+    // =================================================================
+    function renderizarLista() {
+        const container = document.getElementById('exercisesList');
+        let html = '';
+        const modos = [
+            { clave: 'zoom-in', nombre: '🔬 Zoom In · Enfoque quirúrgico' },
+            { clave: 'zoom-out', nombre: '🌍 Zoom Out · Visión sistémica' },
+            { clave: 'reset', nombre: '⏱️ Reset · Micro-descanso' }
+        ];
+        
+        for(let modo of modos) {
+            const ejerciciosModo = EJERCICIOS.filter(e => e.modo === modo.clave);
+            html += `<div style="margin-bottom:1.5rem;">
+                        <div style="background:#d4e2d0; padding:0.5rem 1rem; border-radius:1.5rem; margin-bottom:0.5rem; font-weight:600;">${modo.nombre}</div>`;
+            for(let ej of ejerciciosModo) {
+                const completado = estaCompletado(ej.id);
+                html += `<div class="exercise-item ${completado ? 'completed' : ''}" data-id="${ej.id}">
+                            <div><strong>${ej.titulo}</strong><br><span style="font-size:0.7rem;">${Math.floor(ej.duracion_seg/60)} min</span></div>
+                            <div class="exercise-badge">${completado ? '✓' : '▶'}</div>
+                         </div>`;
+            }
+            html += `</div>`;
+        }
+        container.innerHTML = html;
+        
+        document.querySelectorAll('.exercise-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const id = parseInt(item.getAttribute('data-id'));
+                abrirMeditacion(id);
+            });
+        });
+    }
+    
+    // =================================================================
+    // 8. PESTAÑAS
+    // =================================================================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.getAttribute('data-tab');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        });
+    });
+    
+    // =================================================================
+    // 9. INICIALIZACIÓN Y MICRO-RESET DESDE CARD
+    // =================================================================
+    document.getElementById('microResetBtn').addEventListener('click', iniciarMicroReset);
+    document.getElementById('runDiagnostic').addEventListener('click', ejecutarDiagnostico);
+    document.getElementById('diagnosticBtn').addEventListener('click', () => {
+        document.querySelector('[data-tab="exercises"]').click();
+    });
+    
+    // =================================================================
+    // 10. INICIAR
+    // =================================================================
+    cargarDatos();
+    renderDiagnostico();
+    renderizarLista();
+    actualizarRecomendacionUI();
+    
+    // Registrar visita para racha
+    actualizarRacha();
+    
+    function mostrarToast(msg) {
+        let old = document.querySelector('.toast');
+        if(old) old.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerText = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+    
+    // PWA offline
+    if('serviceWorker' in navigator) {
+        const swCode = `self.addEventListener('install', e => { e.waitUntil(caches.open('mindforge-v1').then(cache => cache.addAll(['/','/index.html']))); self.skipWaiting(); });
+        self.addEventListener('fetch', e => { e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))); });`;
+        const blob = new Blob([swCode], {type: 'application/javascript'});
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+    }
+</script>
+</body>
+</html>
