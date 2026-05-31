@@ -6,11 +6,16 @@
     <meta name="theme-color" content="#1e5631">
     <meta name="description" content="MindForge · Entrenamiento cognitivo para emprendedores. Enfoque, resolución de problemas y meditación aplicada.">
     
-    <!-- Metaetiquetas para iOS (PWA) -->
+    <!-- Metaetiquetas para iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="MindForge">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%232c5e3a'/%3E%3Cpath d='M35,50 L50,35 L65,50 L50,65 Z' fill='%23f7f3e0'/%3E%3Ctext x='50' y='78' font-size='20' text-anchor='middle' fill='%23f7f3e0'%3E⚡%3C/text%3E%3C/svg%3E">
+    
+    <!-- Manifest PWA -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Icono para iOS -->
+    <link rel="apple-touch-icon" href="icon-192.png">
     
     <title>MindForge · Enfoque Emprendedor</title>
     
@@ -56,7 +61,6 @@
             font-size: 0.8rem;
         }
 
-        /* Dashboard cards */
         .dashboard {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -81,7 +85,6 @@
             color: #5a7c6e;
         }
 
-        /* Diagnóstico rápido */
         .diagnostic-card {
             background: linear-gradient(135deg, #fef9e6, #fff6e0);
             border-radius: 1.2rem;
@@ -114,7 +117,6 @@
             color: white;
         }
 
-        /* Recomendación */
         .recommend-card {
             background: #2c5e3a;
             color: white;
@@ -135,7 +137,6 @@
             margin: 0.3rem 0;
         }
 
-        /* Pestañas */
         .tabs {
             display: flex;
             gap: 0.5rem;
@@ -166,7 +167,6 @@
             display: block;
         }
 
-        /* Ejercicios */
         .exercise-item {
             background: white;
             border-radius: 1rem;
@@ -190,7 +190,6 @@
             border-radius: 1rem;
         }
 
-        /* Simulador de problema */
         .problem-simulator {
             background: white;
             border-radius: 1.2rem;
@@ -213,7 +212,6 @@
             font-size: 0.9rem;
         }
 
-        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -332,12 +330,10 @@
 </div>
 
 <div class="container">
-    <!-- Banner de instalación PWA -->
     <div id="installBanner" class="install-banner">
         📱 Instalar MindForge como app · Táctil · Offline · Rápido
     </div>
 
-    <!-- Dashboard -->
     <div class="dashboard">
         <div class="stat-card">
             <div class="stat-number" id="streakCount">0</div>
@@ -357,7 +353,6 @@
         </div>
     </div>
 
-    <!-- Diagnóstico rápido -->
     <div class="diagnostic-card" id="diagnosticBtn">
         <div class="diagnostic-question">🔍 ¿Cómo está tu mente ahora?</div>
         <div id="diagnosticArea">
@@ -368,26 +363,22 @@
         </div>
     </div>
 
-    <!-- Recomendación del momento -->
     <div id="recommendCard" class="recommend-card">
         <div class="recommend-title">✨ Recomendación basada en diagnóstico</div>
         <div class="recommend-mode" id="recommendMode">🔬 Zoom In</div>
         <div id="recommendText">Inicia sesión de enfoque quirúrgico</div>
     </div>
 
-    <!-- Pestañas -->
     <div class="tabs">
         <button class="tab-btn active" data-tab="exercises">🧘 Meditaciones</button>
         <button class="tab-btn" data-tab="problem">💼 Simulador de problema</button>
         <button class="tab-btn" data-tab="microreset">⏱️ Micro-descanso 40s</button>
     </div>
 
-    <!-- Contenido pestaña 1: Ejercicios -->
     <div id="tab-exercises" class="tab-content active">
         <div id="exercisesList"></div>
     </div>
 
-    <!-- Contenido pestaña 2: Simulador de problema -->
     <div id="tab-problem" class="tab-content">
         <div class="problem-simulator">
             <h4>📝 Define tu problema de negocio</h4>
@@ -400,7 +391,6 @@
         </div>
     </div>
 
-    <!-- Contenido pestaña 3: Micro-descanso 40s -->
     <div id="tab-microreset" class="tab-content">
         <div class="micro-reset" id="microResetBtn">
             <div style="font-size:3rem;">⏱️</div>
@@ -417,30 +407,21 @@
 </div>
 
 <script>
-    // =================================================================
-    // 1. EJERCICIOS CLASIFICADOS POR MODO (Zoom In / Zoom Out)
-    // =================================================================
     const EJERCICIOS = [
-        // ZOOM IN (Atención Focalizada) - para enfoque quirúrgico
         { id: 1, modo: "zoom-in", titulo: "Atención focalizada en la respiración", duracion_seg: 120, tecnica: "Concéntrate únicamente en la sensación del aire entrando y saliendo por la nariz. Cada vez que tu mente divague, vuelve suavemente a la respiración. Esto entrena el hiperenfoque para tu problema de negocio.", autor: "Adaptado de Kabat-Zinn" },
         { id: 2, modo: "zoom-in", titulo: "Un solo objeto: tu problema clave", duracion_seg: 180, tecnica: "Visualiza tu problema como un objeto concreto. Obsérvalo desde todos los ángulos. No intentes resolverlo, solo míralo con detalle extremo.", autor: "Técnica de enfoque ejecutivo" },
         { id: 3, modo: "zoom-in", titulo: "Escaneo de una variable", duracion_seg: 150, tecnica: "Elige una sola variable de tu negocio (ej: tasa de conversión). Mantén tu atención en ella durante toda la meditación. Ignora todo lo demás.", autor: "Basado en Goleman" },
-        // ZOOM OUT (Monitoreo Abierto) - para visión sistémica
         { id: 4, modo: "zoom-out", titulo: "Observación de pensamientos como nubes", duracion_seg: 180, tecnica: "Siéntate y observa todos tus pensamientos sobre el negocio sin aferrarte. Déjalos pasar como nubes. Esto abre espacio para conexiones inesperadas.", autor: "Thich Nhat Hanh" },
         { id: 5, modo: "zoom-out", titulo: "Visión sistémica del problema", duracion_seg: 180, tecnica: "Imagina tu problema como parte de un sistema más grande. ¿Qué causas raíz? ¿Qué efectos secundarios? Observa sin juzgar.", autor: "Peter Senge adaptado" },
         { id: 6, modo: "zoom-out", titulo: "Escucha abierta (sonidos sin etiqueta)", duracion_seg: 150, tecnica: "Escucha todos los sonidos a tu alrededor sin nombrarlos. Esto entrena tu mente para recibir información sin filtros, clave para la innovación.", autor: "Shunryu Suzuki" },
-        // RESET (micro-meditación)
         { id: 7, modo: "reset", titulo: "Micro-reset de 40s", duracion_seg: 40, tecnica: "4s inhala - 4s retén - 4s exhala - 4s pausa. Repite 3 veces. Luego define UNA sola tarea para los próximos minutos.", autor: "Protocolo de reenfoque" }
     ];
 
-    // =================================================================
-    // 2. ESTADO Y ALMACENAMIENTO
-    // =================================================================
     let progreso = {};
     let streak = 0;
     let stats = { problemsRefined: 0, zoomInSessions: 0, zoomOutSessions: 0 };
     let recomendacionActual = "zoom-in";
-    let deferredPrompt = null; // Para instalación PWA
+    let deferredPrompt = null;
 
     function cargarDatos() {
         const saved = localStorage.getItem('mindforge_progress');
@@ -456,14 +437,8 @@
         actualizarUIStats();
     }
     
-    function guardarProgreso() {
-        localStorage.setItem('mindforge_progress', JSON.stringify(progreso));
-    }
-    
-    function guardarStats() {
-        localStorage.setItem('mindforge_stats', JSON.stringify(stats));
-        actualizarUIStats();
-    }
+    function guardarProgreso() { localStorage.setItem('mindforge_progress', JSON.stringify(progreso)); }
+    function guardarStats() { localStorage.setItem('mindforge_stats', JSON.stringify(stats)); actualizarUIStats(); }
     
     function actualizarUIStats() {
         document.getElementById('problemsSolved').innerText = stats.problemsRefined;
@@ -476,19 +451,15 @@
         const hoy = new Date().toISOString().slice(0,10);
         progreso[id] = hoy;
         guardarProgreso();
-        
         if(modo === 'zoom-in') stats.zoomInSessions++;
         if(modo === 'zoom-out') stats.zoomOutSessions++;
         guardarStats();
-        
         actualizarRacha();
         renderizarLista();
-        mostrarToast(`✅ Sesión completada: ¡modo ${modo === 'zoom-in' ? 'enfoque' : modo === 'zoom-out' ? 'visión' : 'reset'} activado!`);
+        mostrarToast(`✅ Sesión completada: ${modo === 'zoom-in' ? 'enfoque' : modo === 'zoom-out' ? 'visión' : 'reset'} activado`);
     }
     
-    function estaCompletado(id) {
-        return progreso[id] !== undefined && progreso[id] !== null;
-    }
+    function estaCompletado(id) { return progreso[id] !== undefined && progreso[id] !== null; }
     
     function actualizarRacha() {
         const hoy = new Date().toISOString().slice(0,10);
@@ -506,9 +477,6 @@
         document.getElementById('streakCount').innerText = streak;
     }
     
-    // =================================================================
-    // 3. DIAGNÓSTICO RÁPIDO
-    // =================================================================
     let respuestasDiag = { q1: 3, q2: 3, q3: 3 };
     
     function renderDiagnostico() {
@@ -540,18 +508,13 @@
         const vision = respuestasDiag.q2;
         const dispersion = respuestasDiag.q3;
         
-        if(dispersion >= 4) {
-            recomendacionActual = "reset";
-        } else if(rumiacion >= 4) {
-            recomendacionActual = "zoom-out";
-        } else if(vision >= 4) {
-            recomendacionActual = "zoom-in";
-        } else {
-            recomendacionActual = "zoom-in";
-        }
+        if(dispersion >= 4) recomendacionActual = "reset";
+        else if(rumiacion >= 4) recomendacionActual = "zoom-out";
+        else if(vision >= 4) recomendacionActual = "zoom-in";
+        else recomendacionActual = "zoom-in";
         
         actualizarRecomendacionUI();
-        mostrarToast(`🔍 Recomendación: ${recomendacionActual === 'zoom-in' ? 'Enfoque quirúrgico (Zoom In)' : recomendacionActual === 'zoom-out' ? 'Visión sistémica (Zoom Out)' : 'Micro-descanso (Reset)'}`);
+        mostrarToast(`🔍 Recomendación: ${recomendacionActual === 'zoom-in' ? 'Zoom In (enfoque)' : recomendacionActual === 'zoom-out' ? 'Zoom Out (visión)' : 'Reset (micro-descanso)'}`);
     }
     
     function actualizarRecomendacionUI() {
@@ -562,22 +525,17 @@
         };
         document.getElementById('recommendMode').innerHTML = modeMap[recomendacionActual].nombre;
         document.getElementById('recommendText').innerHTML = modeMap[recomendacionActual].desc;
-        const card = document.getElementById('recommendCard');
-        card.onclick = () => iniciarSesionPorRecomendacion();
+        document.getElementById('recommendCard').onclick = () => iniciarSesionPorRecomendacion();
     }
     
     function iniciarSesionPorRecomendacion() {
-        if(recomendacionActual === 'reset') {
-            iniciarMicroReset();
-        } else {
-            const ejercicioRecomendado = EJERCICIOS.find(e => e.modo === recomendacionActual);
-            if(ejercicioRecomendado) abrirMeditacion(ejercicioRecomendado.id);
+        if(recomendacionActual === 'reset') iniciarMicroReset();
+        else {
+            const ejercicio = EJERCICIOS.find(e => e.modo === recomendacionActual);
+            if(ejercicio) abrirMeditacion(ejercicio.id);
         }
     }
     
-    // =================================================================
-    // 4. MEDITACIÓN MODAL
-    // =================================================================
     function abrirMeditacion(id) {
         const ejercicio = EJERCICIOS.find(e => e.id === id);
         if(!ejercicio) return;
@@ -640,9 +598,7 @@
                         mostrarToast("🔔 Tiempo completado. ¡Bien hecho!");
                         if(navigator.vibrate) navigator.vibrate(200);
                     }
-                } else {
-                    clearInterval(timerInterval);
-                }
+                } else clearInterval(timerInterval);
             }, 1000);
         });
         
@@ -662,11 +618,8 @@
         });
         
         document.getElementById('completeMedBtn').addEventListener('click', () => {
-            if(!estaCompletado(ejercicio.id)) {
-                marcarCompletado(ejercicio.id, ejercicio.modo);
-            } else {
-                mostrarToast("Ya habías completado este ejercicio");
-            }
+            if(!estaCompletado(ejercicio.id)) marcarCompletado(ejercicio.id, ejercicio.modo);
+            else mostrarToast("Ya habías completado este ejercicio");
             if(timerInterval) clearInterval(timerInterval);
             window.speechSynthesis.cancel();
             modal.remove();
@@ -675,9 +628,6 @@
         actualizarCirculo(tiempoRestante, ejercicio.duracion_seg);
     }
     
-    // =================================================================
-    // 5. MICRO-DESCANSO DE 40 SEGUNDOS
-    // =================================================================
     function iniciarMicroReset() {
         const microDiv = document.getElementById('microTimer');
         const resetBtn = document.getElementById('microResetBtn');
@@ -702,32 +652,21 @@
                 if(!estaCompletado(7)) marcarCompletado(7, 'reset');
                 return;
             }
-            
             segs--;
             const mins = Math.floor(segs/60);
             const segsShow = segs % 60;
             timeEl.innerText = `${mins.toString().padStart(2,'0')}:${segsShow.toString().padStart(2,'0')}`;
-            
             subTimer--;
-            if(subTimer <= 0) {
-                fase = (fase + 1) % 4;
-                subTimer = 4;
-            }
+            if(subTimer <= 0) { fase = (fase + 1) % 4; subTimer = 4; }
             phaseEl.innerText = fases[fase] + ` (${subTimer}s)`;
         }, 1000);
     }
     
-    // =================================================================
-    // 6. SIMULADOR DE PROBLEMA
-    // =================================================================
     let problemaOriginal = "";
     
     document.getElementById('meditateBeforeProblem').addEventListener('click', () => {
         problemaOriginal = document.getElementById('problemBefore').value;
-        if(!problemaOriginal.trim()) {
-            mostrarToast("Escribe tu problema primero");
-            return;
-        }
+        if(!problemaOriginal.trim()) { mostrarToast("Escribe tu problema primero"); return; }
         const zoomOutEj = EJERCICIOS.find(e => e.modo === 'zoom-out');
         if(zoomOutEj) {
             mostrarToast("🧘 Medita para ganar perspectiva. Luego vuelve a definir tu problema.");
@@ -738,10 +677,7 @@
     document.getElementById('compareProblemBtn').addEventListener('click', () => {
         const antes = problemaOriginal;
         const despues = document.getElementById('problemAfter').value;
-        if(!antes || !despues) {
-            mostrarToast("Completa ambas definiciones del problema");
-            return;
-        }
+        if(!antes || !despues) { mostrarToast("Completa ambas definiciones del problema"); return; }
         
         const antesWords = antes.split(/\s+/).length;
         const despuesWords = despues.split(/\s+/).length;
@@ -751,21 +687,14 @@
         stats.problemsRefined++;
         guardarStats();
         
-        resultDiv.innerHTML = `
-            <div class="insight-badge" style="background:#e8f5e9;">
-                <strong>📊 Análisis de mejora:</strong><br>
-                Definición original: ${antesWords} palabras<br>
-                Nueva definición: ${despuesWords} palabras<br>
-                Tu problema está ahora ${mejora}. La meditación ayudó a reducir la rumiación y ganar claridad.
-                <br>🎯 +1 problema refinado.
-            </div>
-        `;
+        resultDiv.innerHTML = `<div class="insight-badge" style="background:#e8f5e9;">
+            <strong>📊 Análisis de mejora:</strong><br>
+            Definición original: ${antesWords} palabras<br>
+            Nueva definición: ${despuesWords} palabras<br>
+            Tu problema está ahora ${mejora}. La meditación ayudó a reducir la rumiación.<br>🎯 +1 problema refinado.</div>`;
         mostrarToast("✨ ¡Problema refinado! Has ganado claridad.");
     });
     
-    // =================================================================
-    // 7. RENDERIZAR LISTA DE EJERCICIOS
-    // =================================================================
     function renderizarLista() {
         const container = document.getElementById('exercisesList');
         let html = '';
@@ -777,8 +706,7 @@
         
         for(let modo of modos) {
             const ejerciciosModo = EJERCICIOS.filter(e => e.modo === modo.clave);
-            html += `<div style="margin-bottom:1.5rem;">
-                        <div style="background:#d4e2d0; padding:0.5rem 1rem; border-radius:1.5rem; margin-bottom:0.5rem; font-weight:600;">${modo.nombre}</div>`;
+            html += `<div style="margin-bottom:1.5rem;"><div style="background:#d4e2d0; padding:0.5rem 1rem; border-radius:1.5rem; margin-bottom:0.5rem; font-weight:600;">${modo.nombre}</div>`;
             for(let ej of ejerciciosModo) {
                 const completado = estaCompletado(ej.id);
                 html += `<div class="exercise-item ${completado ? 'completed' : ''}" data-id="${ej.id}">
@@ -791,16 +719,10 @@
         container.innerHTML = html;
         
         document.querySelectorAll('.exercise-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const id = parseInt(item.getAttribute('data-id'));
-                abrirMeditacion(id);
-            });
+            item.addEventListener('click', () => abrirMeditacion(parseInt(item.getAttribute('data-id'))));
         });
     }
     
-    // =================================================================
-    // 8. PESTAÑAS
-    // =================================================================
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const tab = btn.getAttribute('data-tab');
@@ -811,9 +733,6 @@
         });
     });
     
-    // =================================================================
-    // 9. INSTALACIÓN PWA
-    // =================================================================
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
@@ -823,19 +742,11 @@
             installBanner.style.display = 'none';
             if(deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if(choiceResult.outcome === 'accepted') {
-                        console.log('PWA instalada');
-                    }
-                    deferredPrompt = null;
-                });
+                deferredPrompt.userChoice.then(() => deferredPrompt = null);
             }
         });
     });
     
-    // =================================================================
-    // 10. INICIALIZACIÓN
-    // =================================================================
     cargarDatos();
     renderDiagnostico();
     renderizarLista();
@@ -855,17 +766,8 @@
         setTimeout(() => toast.remove(), 2500);
     }
     
-    // =================================================================
-    // 11. SERVICE WORKER PARA OFFLINE (versión corregida)
-    // =================================================================
     if('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').catch(err => {
-            // Fallback: si no hay servidor, registramos un SW inline
-            const swCode = `self.addEventListener('install', event => { event.waitUntil(self.skipWaiting()); });
-            self.addEventListener('fetch', event => { event.respondWith(fetch(event.request).catch(() => new Response('Offline', { status: 503, statusText: 'Offline' }))); });`;
-            const blob = new Blob([swCode], {type: 'application/javascript'});
-            navigator.serviceWorker.register(URL.createObjectURL(blob));
-        });
+        navigator.serviceWorker.register('sw.js').catch(err => console.log('Service Worker error:', err));
     }
 </script>
 </body>
