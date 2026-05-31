@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#2c7da0">
+    <meta name="theme-color" content="#1e5631">
     <meta name="description" content="MindForge · Entrenamiento cognitivo para emprendedores. Enfoque, resolución de problemas y meditación aplicada.">
     
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%232c5e3a'/%3E%3Cpath d='M35,50 L50,35 L65,50 L50,65 Z' fill='%23f7f3e0'/%3E%3Cpath d='M50,30 Q58,45 50,60 Q42,45 50,30' fill='%23f7f3e0'/%3E%3Ctext x='50' y='78' font-size='20' text-anchor='middle' fill='%23f7f3e0'%3E⚡%3C/text%3E%3C/svg%3E">
+    <!-- Metaetiquetas para iOS (PWA) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MindForge">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%232c5e3a'/%3E%3Cpath d='M35,50 L50,35 L65,50 L50,65 Z' fill='%23f7f3e0'/%3E%3Ctext x='50' y='78' font-size='20' text-anchor='middle' fill='%23f7f3e0'%3E⚡%3C/text%3E%3C/svg%3E">
     
     <title>MindForge · Enfoque Emprendedor</title>
     
@@ -95,6 +99,7 @@
             gap: 0.5rem;
             justify-content: center;
             margin: 0.8rem 0;
+            flex-wrap: wrap;
         }
         .rating-btn {
             background: #e0e8e0;
@@ -276,6 +281,7 @@
             text-align: center;
             padding: 1.5rem;
             border-radius: 2rem;
+            cursor: pointer;
         }
         .hidden {
             display: none;
@@ -306,6 +312,16 @@
             margin-top: 2rem;
         }
         button:active { transform: scale(0.97); }
+        .install-banner {
+            background: #e67e22;
+            color: white;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -316,6 +332,11 @@
 </div>
 
 <div class="container">
+    <!-- Banner de instalación PWA -->
+    <div id="installBanner" class="install-banner">
+        📱 Instalar MindForge como app · Táctil · Offline · Rápido
+    </div>
+
     <!-- Dashboard -->
     <div class="dashboard">
         <div class="stat-card">
@@ -381,7 +402,7 @@
 
     <!-- Contenido pestaña 3: Micro-descanso 40s -->
     <div id="tab-microreset" class="tab-content">
-        <div class="micro-reset" id="microResetBtn" style="cursor:pointer;">
+        <div class="micro-reset" id="microResetBtn">
             <div style="font-size:3rem;">⏱️</div>
             <h3>Iniciar micro-descanso de 40 segundos</h3>
             <p>Respiración cuadrada · Reenfoque · Rompe la rumiación</p>
@@ -418,7 +439,8 @@
     let progreso = {};
     let streak = 0;
     let stats = { problemsRefined: 0, zoomInSessions: 0, zoomOutSessions: 0 };
-    let recomendacionActual = "zoom-in"; // zoom-in, zoom-out, reset
+    let recomendacionActual = "zoom-in";
+    let deferredPrompt = null; // Para instalación PWA
 
     function cargarDatos() {
         const saved = localStorage.getItem('mindforge_progress');
@@ -594,7 +616,7 @@
         function actualizarCirculo(restante, total) {
             const circle = document.getElementById('progressCircle');
             if(circle) {
-                const dasharray = 2 * Math.PI * 70; // ~440
+                const dasharray = 2 * Math.PI * 70;
                 const offset = dasharray * (restante / total);
                 circle.style.strokeDashoffset = offset;
             }
@@ -663,7 +685,7 @@
         microDiv.classList.remove('hidden');
         
         let segs = 40;
-        let fase = 0; // 0: inhalar, 1: retener, 2: exhalar, 3: pausa
+        let fase = 0;
         const fases = ['🌬️ Inhala 4s', '⏸️ Retén 4s', '🌬️ Exhala 4s', '🕊️ Pausa 4s'];
         let subTimer = 4;
         
@@ -677,7 +699,6 @@
                 resetBtn.classList.remove('hidden');
                 mostrarToast("✅ Micro-descanso completado. Ahora define UNA sola tarea.");
                 if(navigator.vibrate) navigator.vibrate([200,100,200]);
-                // Registrar como reset completado
                 if(!estaCompletado(7)) marcarCompletado(7, 'reset');
                 return;
             }
@@ -707,7 +728,6 @@
             mostrarToast("Escribe tu problema primero");
             return;
         }
-        // Abrir meditación Zoom Out
         const zoomOutEj = EJERCICIOS.find(e => e.modo === 'zoom-out');
         if(zoomOutEj) {
             mostrarToast("🧘 Medita para ganar perspectiva. Luego vuelve a definir tu problema.");
@@ -723,7 +743,6 @@
             return;
         }
         
-        // Simular mejora (comparación simple de longitud y palabras clave)
         const antesWords = antes.split(/\s+/).length;
         const despuesWords = despues.split(/\s+/).length;
         const mejora = despuesWords > antesWords ? "más detallada" : despuesWords < antesWords ? "más concisa" : "similar en extensión";
@@ -793,24 +812,38 @@
     });
     
     // =================================================================
-    // 9. INICIALIZACIÓN Y MICRO-RESET DESDE CARD
+    // 9. INSTALACIÓN PWA
     // =================================================================
-    document.getElementById('microResetBtn').addEventListener('click', iniciarMicroReset);
-    document.getElementById('runDiagnostic').addEventListener('click', ejecutarDiagnostico);
-    document.getElementById('diagnosticBtn').addEventListener('click', () => {
-        document.querySelector('[data-tab="exercises"]').click();
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const installBanner = document.getElementById('installBanner');
+        installBanner.style.display = 'block';
+        installBanner.addEventListener('click', () => {
+            installBanner.style.display = 'none';
+            if(deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if(choiceResult.outcome === 'accepted') {
+                        console.log('PWA instalada');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        });
     });
     
     // =================================================================
-    // 10. INICIAR
+    // 10. INICIALIZACIÓN
     // =================================================================
     cargarDatos();
     renderDiagnostico();
     renderizarLista();
     actualizarRecomendacionUI();
-    
-    // Registrar visita para racha
     actualizarRacha();
+    
+    document.getElementById('microResetBtn').addEventListener('click', iniciarMicroReset);
+    document.getElementById('runDiagnostic').addEventListener('click', ejecutarDiagnostico);
     
     function mostrarToast(msg) {
         let old = document.querySelector('.toast');
@@ -822,12 +855,17 @@
         setTimeout(() => toast.remove(), 2500);
     }
     
-    // PWA offline
+    // =================================================================
+    // 11. SERVICE WORKER PARA OFFLINE (versión corregida)
+    // =================================================================
     if('serviceWorker' in navigator) {
-        const swCode = `self.addEventListener('install', e => { e.waitUntil(caches.open('mindforge-v1').then(cache => cache.addAll(['/','/index.html']))); self.skipWaiting(); });
-        self.addEventListener('fetch', e => { e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))); });`;
-        const blob = new Blob([swCode], {type: 'application/javascript'});
-        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+        navigator.serviceWorker.register('/sw.js').catch(err => {
+            // Fallback: si no hay servidor, registramos un SW inline
+            const swCode = `self.addEventListener('install', event => { event.waitUntil(self.skipWaiting()); });
+            self.addEventListener('fetch', event => { event.respondWith(fetch(event.request).catch(() => new Response('Offline', { status: 503, statusText: 'Offline' }))); });`;
+            const blob = new Blob([swCode], {type: 'application/javascript'});
+            navigator.serviceWorker.register(URL.createObjectURL(blob));
+        });
     }
 </script>
 </body>
